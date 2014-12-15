@@ -40,7 +40,27 @@ func handleRequest(conn net.Conn) {
 		fmt.Println("Error on read: ", err.Error())
 		os.Exit(1)
 	}
-	fmt.Printf(string(buf))
-	fmt.Println(bufflen)
-	conn.Write(buf)
+	parseCode(buf, bufflen)
+}
+
+func parseCode(buf []byte, bufflen int) {
+
+	ii := 0
+	mystring := make([]string, 512)
+
+	for i := 0; i < bufflen; i++ {
+		switch string(buf[i]) {
+		case ")":
+			ii = 0
+		case "(":
+			ii = 0
+		case "\n", "\r":
+			//if new line character, do nothing
+		default:
+			mystring[ii] = string(buf[i])
+			ii++
+		}
+	}
+
+	fmt.Println(mystring[0:bufflen])
 }
